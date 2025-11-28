@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fare Estimator</title>
+</head>
+<body>
+
+    <h2>Taxi Fare Estimator (UK)</h2>
+
+    <input id="pickup" placeholder="Pickup address">
+    <br><br>
+
+    <input id="dropoff" placeholder="Dropoff address">
+    <br><br>
+
+    <button onclick="calculateMock()">Mock Fare</button>
+    <button onclick="calculateLive()">Real Fare</button>
+
+    <script>
+        // -------------------------
+        // MOCK FARE (Static distance)
+        // -------------------------
+        async function calculateMock() {
+            let pickup = document.getElementById("pickup").value;
+            let dropoff = document.getElementById("dropoff").value;
+
+            let res = await fetch(`/fare/mock?pickup=${pickup}&dropoff=${dropoff}`);
+            let data = await res.json();
+
+            alert(
+                `Pickup: ${data.pickup}\n` +
+                `Dropoff: ${data.dropoff}\n` +
+                `Distance: ${data.distance_km} km\n` +
+                `Fare: ${data.fare_estimate}`
+            );
+        }
+
+        // -------------------------
+        // REAL FARE (OSRM + Nominatim)
+        // -------------------------
+        async function calculateLive() {
+            let pickup = document.getElementById("pickup").value;
+            let dropoff = document.getElementById("dropoff").value;
+
+            let res = await fetch(`/fare?pickup=${pickup}&dropoff=${dropoff}`);
+            let data = await res.json();
+
+            alert(
+                `Pickup: ${data.pickup}\n` +
+                `Dropoff: ${data.dropoff}\n` +
+                `Distance: ${data.distance_km} km\n` +
+                `Fare: ${data.fare_estimate}`
+            );
+        }
+    </script>
+
+</body>
+</html>
